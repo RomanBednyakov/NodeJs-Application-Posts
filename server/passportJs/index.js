@@ -8,9 +8,10 @@ const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 
 const authUser = function (req, res, next) {
-    let auth = req.get('Authorization');
-    if(auth && req.url !== '/users/auth') {
-        jwt.verify(req.headers.authorization, config.secretOrKey, {ignoreExpiration: false},  (err,decoded) => {
+  const auth = req.get('Authorization');
+    if(auth) {
+      const token = req.headers.authorization;
+      jwt.verify(token.slice(1, -1), config.secretOrKey, (err,decoded) => {
             if(isNaN(err)) {
                 res.status(401).json({message:"token not verify"});
             }
